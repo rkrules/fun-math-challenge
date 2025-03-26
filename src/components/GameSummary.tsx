@@ -65,7 +65,7 @@ const GameSummary = ({
 
   return (
     <div className="backdrop-blur-md bg-white/90 shadow-xl rounded-2xl p-8 max-w-md w-full
-                  border border-white/40 animate-scale-in space-y-6">
+                  border border-white/40 animate-scale-in space-y-6 mx-auto">
       <h2 className="text-2xl font-semibold text-center mb-4">Game Summary</h2>
       
       <div className="grid grid-cols-2 gap-4">

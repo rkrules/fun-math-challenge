@@ -36,9 +36,9 @@ export const generateQuestion = (operation: Operation, difficulty: Difficulty): 
   if (operation === 'multiplication') {
     if (difficulty === 'medium') {
       num1 = Math.min(num1, 12);
-      num2 = Math.min(num2, 12);
+      num2 = Math.min(num2, 15);
     } else if (difficulty === 'hard') {
-      num1 = Math.min(num1, 15);
+      num1 = Math.min(num1, 25);
       num2 = Math.min(num2, 15);
     }
   }
@@ -91,7 +91,7 @@ export const calculatePoints = (
   }[difficulty];
   
   // Time bonus (max 15 seconds, faster = more points)
-  const maxTimeBonus = 15;
+  const maxTimeBonus = 25;
   const timeBonus = Math.max(0, maxTimeBonus - timeTaken);
   
   // Streak multiplier (every 5 correct answers increases multiplier)
