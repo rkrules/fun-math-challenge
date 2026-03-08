@@ -18,15 +18,18 @@ interface GameControlsProps {
   canStart: boolean;
   soundEnabled: boolean;
   onToggleSound: (enabled: boolean) => void;
+  aiCoachEnabled: boolean;
+  onToggleAiCoach: (enabled: boolean) => void;
 }
 
-const GameControls = ({ 
+const GameControls = ({
   difficulty, onChangeDifficulty, 
   onStartGame, onEndGame, isGameActive,
   timerEnabled, onToggleTimer,
   timePerQuestion, onChangeTime,
   gameMode, canStart,
   soundEnabled, onToggleSound,
+  aiCoachEnabled, onToggleAiCoach,
 }: GameControlsProps) => {
   return (
     <div className="w-full max-w-md mx-auto animate-scale-in">
@@ -86,6 +89,14 @@ const GameControls = ({
             >
               {soundEnabled ? <Volume2 size={20} /> : <VolumeX size={20} className="text-muted-foreground" />}
             </button>
+          </div>
+
+          {/* AI Coach toggle */}
+          <div className="flex items-center justify-between">
+            <label className="text-sm text-muted-foreground uppercase tracking-wider">
+              AI Coach
+            </label>
+            <Switch checked={aiCoachEnabled} onCheckedChange={onToggleAiCoach} />
           </div>
           
           <button

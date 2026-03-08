@@ -27,9 +27,11 @@ const MathGame = () => {
   const [sessionTimeLeft, setSessionTimeLeft] = useState(0);
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [squishmallowMode, setSquishmallowMode] = useState(false);
+  const [aiCoachEnabled, setAiCoachEnabled] = useState(true);
 
   // Game progress
   const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
+  const [wrongAnswers, setWrongAnswers] = useState<{question: Question, userAnswer: number}[]>([]);
   const [score, setScore] = useState(0);
   const [streak, setStreak] = useState(0);
   const [maxStreak, setMaxStreak] = useState(0);
@@ -99,6 +101,7 @@ const MathGame = () => {
     if (!currentQuestion) return;
     setShowFeedback(true);
     setIsAnswerCorrect(false);
+    setWrongAnswers(prev => [...prev, { question: currentQuestion, userAnswer: 0 }]);
     setStreak(0);
     setTotalQuestions(prev => prev + 1);
     setTotalTime(prev => prev + timePerQuestion);
@@ -116,6 +119,7 @@ const MathGame = () => {
     setTotalQuestions(0);
     setCorrectAnswers(0);
     setTotalTime(0);
+    setWrongAnswers([]);
     if (gameMode === 'practice') {
       setSessionTimeLeft(sessionDuration);
     }
@@ -156,6 +160,7 @@ const MathGame = () => {
       }
     } else {
       setStreak(0);
+      setWrongAnswers(prev => [...prev, { question: currentQuestion, userAnswer: answer }]);
       if (soundEnabled) playIncorrectSound();
       toast.error(`Incorrect! The answer is ${currentQuestion.correctAnswer}`);
     }
@@ -224,6 +229,8 @@ const MathGame = () => {
           operation={operation}
           gameMode={gameMode}
           selectedOperations={selectedOperations}
+          aiCoachEnabled={aiCoachEnabled}
+          wrongAnswers={wrongAnswers}
           onPlayAgain={() => {
             setIsGameOver(false);
             handleStartGame();
@@ -245,6 +252,8 @@ const MathGame = () => {
         canStart={canStart}
         soundEnabled={soundEnabled}
         onToggleSound={setSoundEnabled}
+        aiCoachEnabled={aiCoachEnabled}
+        onToggleAiCoach={setAiCoachEnabled}
       />
     </div>
   );
