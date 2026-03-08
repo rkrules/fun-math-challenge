@@ -104,15 +104,27 @@ const QuestionCard = ({ question, onAnswer, isAnswerCorrect, showFeedback, squis
       {showFeedback && (
         <div className="mt-4 text-center animate-fade">
           {isAnswerCorrect ? (
-            <p className="text-green-500 font-medium">Correct!</p>
+            <div>
+              {squishmallowMode && (
+                <p className="text-2xl mb-1">{squishCorrectEmojis[Math.floor(Math.random() * squishCorrectEmojis.length)]}</p>
+              )}
+              <p className="text-green-500 font-medium">
+                {squishmallowMode ? 'Amazing, you squishy genius!' : 'Correct!'}
+              </p>
+            </div>
           ) : (
-            <p className="text-red-500 font-medium">
-              Incorrect. The answer is{' '}
-              {question.options
-                ? question.options.find(o => o.value === question.correctAnswer)?.label
-                : question.correctAnswer}
-              .
-            </p>
+            <div>
+              {squishmallowMode && (
+                <p className="text-2xl mb-1">{squishIncorrectEmojis[Math.floor(Math.random() * squishIncorrectEmojis.length)]}</p>
+              )}
+              <p className="text-red-500 font-medium">
+                {squishmallowMode ? `Almost! It's ` : 'Incorrect. The answer is '}
+                {question.options
+                  ? question.options.find(o => o.value === question.correctAnswer)?.label
+                  : question.correctAnswer}
+                {squishmallowMode ? ' 💕' : '.'}
+              </p>
+            </div>
           )}
         </div>
       )}

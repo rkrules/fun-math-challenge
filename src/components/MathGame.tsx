@@ -246,6 +246,8 @@ const MathGame = () => {
         onChangeTime={setTimePerQuestion}
         gameMode={gameMode}
         canStart={canStart}
+        soundEnabled={soundEnabled}
+        onToggleSound={setSoundEnabled}
       />
     </div>
   );

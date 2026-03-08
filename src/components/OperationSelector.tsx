@@ -152,6 +152,20 @@ const OperationSelector = ({
           </div>
         </div>
       )}
+
+      {/* Squishmallow Mode toggle */}
+      <div className="flex items-center justify-center gap-3 pt-2">
+        <button
+          onClick={() => onToggleSquishmallowMode(!squishmallowMode)}
+          className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all ${
+            squishmallowMode
+              ? 'bg-pink-200 text-pink-800 shadow-md ring-2 ring-pink-300'
+              : 'bg-muted text-muted-foreground hover:bg-muted/80'
+          }`}
+        >
+          🧸 Squishmallow Mode
+        </button>
+      </div>
     </div>
   );
 };
