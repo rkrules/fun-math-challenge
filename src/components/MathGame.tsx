@@ -119,6 +119,7 @@ const MathGame = () => {
     setTotalQuestions(0);
     setCorrectAnswers(0);
     setTotalTime(0);
+    setWrongAnswers([]);
     if (gameMode === 'practice') {
       setSessionTimeLeft(sessionDuration);
     }
