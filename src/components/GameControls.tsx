@@ -90,6 +90,14 @@ const GameControls = ({
               {soundEnabled ? <Volume2 size={20} /> : <VolumeX size={20} className="text-muted-foreground" />}
             </button>
           </div>
+
+          {/* AI Coach toggle */}
+          <div className="flex items-center justify-between">
+            <label className="text-sm text-muted-foreground uppercase tracking-wider">
+              AI Coach
+            </label>
+            <Switch checked={aiCoachEnabled} onCheckedChange={onToggleAiCoach} />
+          </div>
           
           <button
             onClick={onStartGame}

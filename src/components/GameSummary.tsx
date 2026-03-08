@@ -89,6 +89,23 @@ const GameSummary = ({
       <div className="text-center">
         <p className="text-sm text-foreground min-h-[3rem]">{message}</p>
       </div>
+
+      {showPlayAgain && aiCoachEnabled && wrongAnswers.length > 0 && !showCoach && (
+        <button
+          onClick={() => setShowCoach(true)}
+          className="w-full bg-secondary text-secondary-foreground py-3 rounded-xl 
+                   text-lg font-medium shadow-lg hover:shadow-secondary/25 
+                   hover:bg-secondary/90 transition-all animate-fade"
+        >
+          Review with Coach Mathlete 🤓
+        </button>
+      )}
+
+      {showCoach && (
+        <div className="bg-muted p-4 rounded-xl text-center text-sm text-muted-foreground animate-fade">
+          (Coach Mathlete feature coming soon!)
+        </div>
+      )}
       
       {showPlayAgain && (
         <button
