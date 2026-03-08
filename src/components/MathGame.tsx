@@ -57,12 +57,6 @@ const MathGame = () => {
     setShowFeedback(false);
   }, [getRandomOperation, difficulty, timePerQuestion, selectedTable]);
 
-  // Init game
-  useEffect(() => {
-    if (isGameActive && !isGameOver) {
-      generateNewQuestion();
-    }
-  }, [isGameActive, isGameOver, generateNewQuestion]);
 
   // Per-question timer
   useEffect(() => {
