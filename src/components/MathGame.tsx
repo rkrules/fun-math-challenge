@@ -23,8 +23,10 @@ const MathGame = () => {
   const [gameMode, setGameMode] = useState<GameMode>('single');
   const [selectedOperations, setSelectedOperations] = useState<Operation[]>([]);
   const [selectedTable, setSelectedTable] = useState<number | null>(null);
-  const [sessionDuration, setSessionDuration] = useState(10 * 60); // seconds
+  const [sessionDuration, setSessionDuration] = useState(10 * 60);
   const [sessionTimeLeft, setSessionTimeLeft] = useState(0);
+  const [soundEnabled, setSoundEnabled] = useState(true);
+  const [squishmallowMode, setSquishmallowMode] = useState(false);
 
   // Game progress
   const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
