@@ -136,7 +136,7 @@ const MathGame = () => {
   const handleAnswer = (answer: number) => {
     if (!currentQuestion || showFeedback) return;
     const isCorrect = answer === currentQuestion.correctAnswer;
-    const timeTaken = (gameMode === 'single' && timerEnabled) ? timePerQuestion - timeLeft : 0;
+    const timeTaken = timerEnabled ? timePerQuestion - timeLeft : 0;
     
     setIsAnswerCorrect(isCorrect);
     setShowFeedback(true);
@@ -151,12 +151,15 @@ const MathGame = () => {
       setScore(prev => prev + points);
       setCorrectAnswers(prev => prev + 1);
       if (newStreak > 0 && newStreak % 5 === 0) {
+        if (soundEnabled) playStreakSound();
         toast.success(`${newStreak} streak! Multiplier increased!`);
       } else {
+        if (soundEnabled) playCorrectSound();
         toast.success(`Correct! +${points} points`);
       }
     } else {
       setStreak(0);
+      if (soundEnabled) playIncorrectSound();
       toast.error(`Incorrect! The answer is ${currentQuestion.correctAnswer}`);
     }
     setTimeout(() => generateNewQuestion(), 2000);
