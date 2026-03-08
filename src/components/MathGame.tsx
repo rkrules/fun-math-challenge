@@ -27,9 +27,11 @@ const MathGame = () => {
   const [sessionTimeLeft, setSessionTimeLeft] = useState(0);
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [squishmallowMode, setSquishmallowMode] = useState(false);
+  const [aiCoachEnabled, setAiCoachEnabled] = useState(true);
 
   // Game progress
   const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
+  const [wrongAnswers, setWrongAnswers] = useState<{question: Question, userAnswer: number}[]>([]);
   const [score, setScore] = useState(0);
   const [streak, setStreak] = useState(0);
   const [maxStreak, setMaxStreak] = useState(0);
