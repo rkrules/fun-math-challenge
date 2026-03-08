@@ -2,6 +2,7 @@
 import { Difficulty, GameMode } from '../utils/mathUtils';
 import { Switch } from './ui/switch';
 import { Slider } from './ui/slider';
+import { Volume2, VolumeX } from 'lucide-react';
 
 interface GameControlsProps {
   difficulty: Difficulty;
@@ -15,6 +16,8 @@ interface GameControlsProps {
   onChangeTime: (time: number) => void;
   gameMode: GameMode;
   canStart: boolean;
+  soundEnabled: boolean;
+  onToggleSound: (enabled: boolean) => void;
 }
 
 const GameControls = ({ 
