@@ -25,7 +25,6 @@ const GameSummary = ({
   aiCoachEnabled, wrongAnswers,
 }: GameSummaryProps) => {
   const [showPlayAgain, setShowPlayAgain] = useState(false);
-  const [showCoach, setShowCoach] = useState(false);
   const accuracy = totalQuestions > 0 ? Math.round((correctAnswers / totalQuestions) * 100) : 0;
   
   const getMessage = () => {
