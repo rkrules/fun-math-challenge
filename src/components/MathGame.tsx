@@ -108,6 +108,7 @@ const MathGame = () => {
     setStreak(0);
     setTotalQuestions(prev => prev + 1);
     setTotalTime(prev => prev + timePerQuestion);
+    if (soundEnabled) playTimeoutSound();
     toast.error("Time's up!");
     setTimeout(() => generateNewQuestion(), 2000);
   };
