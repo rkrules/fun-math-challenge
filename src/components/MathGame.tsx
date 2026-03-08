@@ -10,6 +10,7 @@ import {
   Operation, Difficulty, Question, GameMode,
   generateQuestion, calculatePoints 
 } from '../utils/mathUtils';
+import { playCorrectSound, playIncorrectSound, playStreakSound, playTimeoutSound } from '../utils/sounds';
 
 const MathGame = () => {
   // Game configuration
