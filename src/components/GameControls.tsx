@@ -29,6 +29,7 @@ const GameControls = ({
   timePerQuestion, onChangeTime,
   gameMode, canStart,
   soundEnabled, onToggleSound,
+  aiCoachEnabled, onToggleAiCoach,
 }: GameControlsProps) => {
   return (
     <div className="w-full max-w-md mx-auto animate-scale-in">
