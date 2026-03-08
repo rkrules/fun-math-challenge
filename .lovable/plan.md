@@ -1,40 +1,22 @@
 
 
-## Plan: AI Math Coach for Wrong Answers
+## Plan: Add AI Coach Disable Toggle
 
-### Overview
-After a round ends, if there were wrong answers, show a button: "Want to review your mistakes with Coach Mathlete? 🤓" When clicked, an AI coach (funny, encouraging personality) walks through each wrong question with explanations and tips.
+Yes — the AI coach feature (Coach Mathlete) will be completely optional. Here's how:
 
-### Prerequisites
-This requires Lovable Cloud to be enabled (for the AI gateway). No backend is currently connected.
+### Approach
 
-**Step 0: Enable Lovable Cloud** — needed to access the Lovable AI Gateway (`LOVABLE_API_KEY`).
+The coach only appears as a **button on the Game Summary screen** after a round with wrong answers. The user must actively click "Review with Coach Mathlete" to trigger it — it never runs automatically.
 
-### Implementation
+Additionally, we'll add a **toggle in the setup screen** (alongside the Sound and Timer toggles in `GameControls.tsx`) labeled **"AI Coach"** so users can disable it entirely. When disabled, the review button won't appear at all on the summary screen.
 
-**1. Track wrong answers during gameplay**
-- **`src/components/MathGame.tsx`**: Add a `wrongAnswers` state array that stores `{ question: Question, userAnswer: number }` for each incorrect/timed-out answer. Pass it to `GameSummary`. Reset on game start.
+### Changes
 
-**2. Create AI Coach edge function**
-- **`supabase/functions/math-coach/index.ts`**: Edge function that receives the list of wrong questions and calls the Lovable AI Gateway with a system prompt like:
-  > "You are Coach Mathlete, a hilarious and encouraging math tutor for kids. You use jokes, puns, and silly analogies to explain math. Review each wrong answer, explain WHY it's wrong in a funny way, then show how to get the right answer. Keep it short and fun per question. Use emojis liberally."
-- Returns streamed response.
-
-**3. Create CoachReview component**
-- **`src/components/CoachReview.tsx`**: New component shown in `GameSummary` when user clicks "Review with Coach". Displays:
-  - List of wrong questions with user's wrong answer vs correct answer
-  - A chat-style bubble where the AI coach's streamed explanation appears (rendered with markdown)
-  - A "Got it, thanks Coach!" dismiss button
-
-**4. Update GameSummary**
-- **`src/components/GameSummary.tsx`**: Add a "Review mistakes with Coach Mathlete" button (only shown when there are wrong answers). Toggles the `CoachReview` component.
-
-### Files to change/create
-
-| File | Action |
+| File | Change |
 |------|--------|
-| `src/components/MathGame.tsx` | Add `wrongAnswers` state, populate on wrong/timeout, pass to GameSummary |
-| `src/components/GameSummary.tsx` | Add coach review button + render CoachReview component |
-| `src/components/CoachReview.tsx` | **New** — streams AI coach explanation for wrong answers |
-| `supabase/functions/math-coach/index.ts` | **New** — edge function calling Lovable AI with funny coach persona |
+| `src/components/MathGame.tsx` | Add `aiCoachEnabled` state (default `true`), pass to `GameControls` and `GameSummary` |
+| `src/components/GameControls.tsx` | Add an AI Coach on/off toggle (Switch component, similar to Timer toggle) |
+| `src/components/GameSummary.tsx` | Only show the "Review with Coach" button when `aiCoachEnabled` is `true` AND there are wrong answers |
+
+This will be implemented as part of the overall Coach Mathlete feature — the toggle will be ready from the start.
 
