@@ -1,5 +1,7 @@
 
 import { Difficulty } from '../utils/mathUtils';
+import { Switch } from './ui/switch';
+import { Slider } from './ui/slider';
 
 interface GameControlsProps {
   difficulty: Difficulty;
@@ -7,6 +9,10 @@ interface GameControlsProps {
   onStartGame: () => void;
   onEndGame: () => void;
   isGameActive: boolean;
+  timerEnabled: boolean;
+  onToggleTimer: (enabled: boolean) => void;
+  timePerQuestion: number;
+  onChangeTime: (time: number) => void;
 }
 
 const GameControls = ({ 
@@ -14,7 +20,11 @@ const GameControls = ({
   onChangeDifficulty, 
   onStartGame, 
   onEndGame, 
-  isGameActive 
+  isGameActive,
+  timerEnabled,
+  onToggleTimer,
+  timePerQuestion,
+  onChangeTime,
 }: GameControlsProps) => {
   return (
     <div className="w-full max-w-md mx-auto animate-scale-in">
@@ -49,6 +59,30 @@ const GameControls = ({
                 Hard
               </button>
             </div>
+          </div>
+
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <label className="text-sm text-muted-foreground uppercase tracking-wider">
+                Timer
+              </label>
+              <Switch checked={timerEnabled} onCheckedChange={onToggleTimer} />
+            </div>
+            {timerEnabled && (
+              <div className="flex items-center gap-3">
+                <Slider
+                  min={5}
+                  max={60}
+                  step={5}
+                  value={[timePerQuestion]}
+                  onValueChange={([v]) => onChangeTime(v)}
+                  className="flex-1"
+                />
+                <span className="text-sm font-medium text-muted-foreground w-10 text-right">
+                  {timePerQuestion}s
+                </span>
+              </div>
+            )}
           </div>
           
           <button

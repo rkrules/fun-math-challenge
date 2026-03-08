@@ -14,21 +14,21 @@ import {
   calculatePoints 
 } from '../utils/mathUtils';
 
-const MAX_TIME_PER_QUESTION = 15; // seconds
-
 const MathGame = () => {
   // Game configuration state
   const [operation, setOperation] = useState<Operation>('addition');
   const [difficulty, setDifficulty] = useState<Difficulty>('easy');
   const [isGameActive, setIsGameActive] = useState(false);
   const [isGameOver, setIsGameOver] = useState(false);
+  const [timerEnabled, setTimerEnabled] = useState(true);
+  const [timePerQuestion, setTimePerQuestion] = useState(15);
 
   // Game progress state
   const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
   const [score, setScore] = useState(0);
   const [streak, setStreak] = useState(0);
   const [maxStreak, setMaxStreak] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(MAX_TIME_PER_QUESTION);
+  const [timeLeft, setTimeLeft] = useState(timePerQuestion);
   const [isAnswerCorrect, setIsAnswerCorrect] = useState<boolean | null>(null);
   const [showFeedback, setShowFeedback] = useState(false);
   
@@ -41,10 +41,10 @@ const MathGame = () => {
   const generateNewQuestion = useCallback(() => {
     const newQuestion = generateQuestion(operation, difficulty);
     setCurrentQuestion(newQuestion);
-    setTimeLeft(MAX_TIME_PER_QUESTION);
+    setTimeLeft(timePerQuestion);
     setIsAnswerCorrect(null);
     setShowFeedback(false);
-  }, [operation, difficulty]);
+  }, [operation, difficulty, timePerQuestion]);
 
   // Initialize game when started
   useEffect(() => {
@@ -57,7 +57,7 @@ const MathGame = () => {
   useEffect(() => {
     let timer: number | undefined;
     
-    if (isGameActive && !isGameOver && !showFeedback && timeLeft > 0) {
+    if (timerEnabled && isGameActive && !isGameOver && !showFeedback && timeLeft > 0) {
       timer = window.setInterval(() => {
         setTimeLeft(prevTime => {
           if (prevTime <= 0) {
@@ -73,7 +73,7 @@ const MathGame = () => {
     return () => {
       if (timer) clearInterval(timer);
     };
-  }, [isGameActive, isGameOver, showFeedback, timeLeft]);
+  }, [isGameActive, isGameOver, showFeedback, timeLeft, timerEnabled]);
 
   // Handle timeout when timer reaches zero
   const handleTimeout = () => {
@@ -83,7 +83,7 @@ const MathGame = () => {
     setIsAnswerCorrect(false);
     setStreak(0);
     setTotalQuestions(prev => prev + 1);
-    setTotalTime(prev => prev + MAX_TIME_PER_QUESTION);
+    setTotalTime(prev => prev + timePerQuestion);
     toast.error("Time's up!");
     
     setTimeout(() => {
@@ -115,7 +115,7 @@ const MathGame = () => {
     if (!currentQuestion || showFeedback) return;
     
     const isCorrect = answer === currentQuestion.correctAnswer;
-    const timeTaken = MAX_TIME_PER_QUESTION - timeLeft;
+    const timeTaken = timerEnabled ? timePerQuestion - timeLeft : 0;
     
     setIsAnswerCorrect(isCorrect);
     setShowFeedback(true);
@@ -168,7 +168,8 @@ const MathGame = () => {
             score={score} 
             streak={streak} 
             timeLeft={timeLeft} 
-            maxTime={MAX_TIME_PER_QUESTION} 
+            maxTime={timePerQuestion}
+            timerEnabled={timerEnabled}
           />
           
           <QuestionCard 
@@ -202,6 +203,10 @@ const MathGame = () => {
         onStartGame={handleStartGame}
         onEndGame={handleEndGame}
         isGameActive={isGameActive}
+        timerEnabled={timerEnabled}
+        onToggleTimer={setTimerEnabled}
+        timePerQuestion={timePerQuestion}
+        onChangeTime={setTimePerQuestion}
       />
     </div>
   );
