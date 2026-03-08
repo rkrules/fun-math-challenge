@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from 'react';
-import { Difficulty, Operation } from '../utils/mathUtils';
+import { Difficulty, Operation, getOperationName } from '../utils/mathUtils';
 import { useTypingEffect } from '../utils/animations';
 
 interface GameSummaryProps {
@@ -15,19 +15,12 @@ interface GameSummaryProps {
 }
 
 const GameSummary = ({
-  score,
-  totalQuestions,
-  correctAnswers,
-  maxStreak,
-  averageTime,
-  difficulty,
-  operation,
-  onPlayAgain
+  score, totalQuestions, correctAnswers, maxStreak, averageTime,
+  difficulty, operation, onPlayAgain
 }: GameSummaryProps) => {
   const [showPlayAgain, setShowPlayAgain] = useState(false);
   const accuracy = totalQuestions > 0 ? Math.round((correctAnswers / totalQuestions) * 100) : 0;
   
-  // Encouraging message based on performance
   const getMessage = () => {
     if (accuracy >= 90) return "Excellent work! Your math skills are impressive!";
     if (accuracy >= 70) return "Great job! Keep practicing to get even better!";
@@ -38,21 +31,9 @@ const GameSummary = ({
   const message = useTypingEffect(getMessage(), 30);
   
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowPlayAgain(true);
-    }, 1500);
-    
+    const timer = setTimeout(() => setShowPlayAgain(true), 1500);
     return () => clearTimeout(timer);
   }, []);
-
-  const getOperationName = (op: Operation): string => {
-    switch (op) {
-      case 'addition': return 'Addition';
-      case 'subtraction': return 'Subtraction';
-      case 'multiplication': return 'Multiplication';
-      default: return '';
-    }
-  };
 
   const getDifficultyName = (diff: Difficulty): string => {
     switch (diff) {
@@ -73,26 +54,17 @@ const GameSummary = ({
           <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Score</p>
           <p className="text-2xl font-semibold text-primary">{score}</p>
         </div>
-        
         <div className="bg-muted/50 p-3 rounded-lg">
           <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Accuracy</p>
           <p className="text-2xl font-semibold text-accent">{accuracy}%</p>
         </div>
-        
         <div className="bg-muted/50 p-3 rounded-lg">
-          <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">
-            Best Streak
-          </p>
+          <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Best Streak</p>
           <p className="text-2xl font-semibold text-secondary">{maxStreak}</p>
         </div>
-        
         <div className="bg-muted/50 p-3 rounded-lg">
-          <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">
-            Avg. Time
-          </p>
-          <p className="text-2xl font-semibold text-foreground">
-            {averageTime.toFixed(1)}s
-          </p>
+          <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Avg. Time</p>
+          <p className="text-2xl font-semibold text-foreground">{averageTime.toFixed(1)}s</p>
         </div>
       </div>
       
