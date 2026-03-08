@@ -229,6 +229,8 @@ const MathGame = () => {
           operation={operation}
           gameMode={gameMode}
           selectedOperations={selectedOperations}
+          aiCoachEnabled={aiCoachEnabled}
+          wrongAnswers={wrongAnswers}
           onPlayAgain={() => {
             setIsGameOver(false);
             handleStartGame();
