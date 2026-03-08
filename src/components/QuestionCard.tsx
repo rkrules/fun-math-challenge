@@ -7,9 +7,13 @@ interface QuestionCardProps {
   onAnswer: (answer: number) => void;
   isAnswerCorrect: boolean | null;
   showFeedback: boolean;
+  squishmallowMode?: boolean;
 }
 
-const QuestionCard = ({ question, onAnswer, isAnswerCorrect, showFeedback }: QuestionCardProps) => {
+const squishCorrectEmojis = ['🎀', '🌸', '✨', '💖', '🧸', '🌈', '⭐'];
+const squishIncorrectEmojis = ['🫂', '💗', '🌷', '🧁'];
+
+const QuestionCard = ({ question, onAnswer, isAnswerCorrect, showFeedback, squishmallowMode }: QuestionCardProps) => {
   const [userAnswer, setUserAnswer] = useState<string>('');
   const inputRef = useRef<HTMLInputElement>(null);
   
