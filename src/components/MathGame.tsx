@@ -210,7 +210,8 @@ const MathGame = () => {
             question={currentQuestion} 
             onAnswer={handleAnswer} 
             isAnswerCorrect={isAnswerCorrect} 
-            showFeedback={showFeedback} 
+            showFeedback={showFeedback}
+            squishmallowMode={squishmallowMode}
           />
         </div>
       )}
