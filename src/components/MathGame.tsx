@@ -191,6 +191,8 @@ const MathGame = () => {
           onSelectTable={setSelectedTable}
           sessionDuration={sessionDuration}
           onChangeSessionDuration={setSessionDuration}
+          squishmallowMode={squishmallowMode}
+          onToggleSquishmallowMode={setSquishmallowMode}
         />
       )}
       
