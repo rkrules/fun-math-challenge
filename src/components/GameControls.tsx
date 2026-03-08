@@ -1,5 +1,5 @@
 
-import { Difficulty } from '../utils/mathUtils';
+import { Difficulty, GameMode } from '../utils/mathUtils';
 import { Switch } from './ui/switch';
 import { Slider } from './ui/slider';
 
@@ -13,18 +13,16 @@ interface GameControlsProps {
   onToggleTimer: (enabled: boolean) => void;
   timePerQuestion: number;
   onChangeTime: (time: number) => void;
+  gameMode: GameMode;
+  canStart: boolean;
 }
 
 const GameControls = ({ 
-  difficulty, 
-  onChangeDifficulty, 
-  onStartGame, 
-  onEndGame, 
-  isGameActive,
-  timerEnabled,
-  onToggleTimer,
-  timePerQuestion,
-  onChangeTime,
+  difficulty, onChangeDifficulty, 
+  onStartGame, onEndGame, isGameActive,
+  timerEnabled, onToggleTimer,
+  timePerQuestion, onChangeTime,
+  gameMode, canStart,
 }: GameControlsProps) => {
   return (
     <div className="w-full max-w-md mx-auto animate-scale-in">
@@ -35,62 +33,54 @@ const GameControls = ({
               Select Difficulty
             </p>
             <div className="grid grid-cols-3 gap-3">
-              <button
-                onClick={() => onChangeDifficulty('easy')}
-                data-active={difficulty === 'easy'}
-                className="operation-button"
-              >
-                Easy
-              </button>
-              
-              <button
-                onClick={() => onChangeDifficulty('medium')}
-                data-active={difficulty === 'medium'}
-                className="operation-button"
-              >
-                Medium
-              </button>
-              
-              <button
-                onClick={() => onChangeDifficulty('hard')}
-                data-active={difficulty === 'hard'}
-                className="operation-button"
-              >
-                Hard
-              </button>
+              {(['easy', 'medium', 'hard'] as Difficulty[]).map(d => (
+                <button
+                  key={d}
+                  onClick={() => onChangeDifficulty(d)}
+                  data-active={difficulty === d}
+                  className="operation-button capitalize"
+                >
+                  {d}
+                </button>
+              ))}
             </div>
           </div>
 
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <label className="text-sm text-muted-foreground uppercase tracking-wider">
-                Timer
-              </label>
-              <Switch checked={timerEnabled} onCheckedChange={onToggleTimer} />
-            </div>
-            {timerEnabled && (
-              <div className="flex items-center gap-3">
-                <Slider
-                  min={5}
-                  max={60}
-                  step={5}
-                  value={[timePerQuestion]}
-                  onValueChange={([v]) => onChangeTime(v)}
-                  className="flex-1"
-                />
-                <span className="text-sm font-medium text-muted-foreground w-10 text-right">
-                  {timePerQuestion}s
-                </span>
+          {/* Per-question timer (shown in single mode, or optionally in practice) */}
+          {gameMode === 'single' && (
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <label className="text-sm text-muted-foreground uppercase tracking-wider">
+                  Timer
+                </label>
+                <Switch checked={timerEnabled} onCheckedChange={onToggleTimer} />
               </div>
-            )}
-          </div>
+              {timerEnabled && (
+                <div className="flex items-center gap-3">
+                  <Slider
+                    min={5}
+                    max={60}
+                    step={5}
+                    value={[timePerQuestion]}
+                    onValueChange={([v]) => onChangeTime(v)}
+                    className="flex-1"
+                  />
+                  <span className="text-sm font-medium text-muted-foreground w-10 text-right">
+                    {timePerQuestion}s
+                  </span>
+                </div>
+              )}
+            </div>
+          )}
           
           <button
             onClick={onStartGame}
+            disabled={!canStart}
             className="w-full bg-primary text-primary-foreground py-3 rounded-xl text-lg font-medium 
-                     shadow-lg hover:shadow-primary/25 hover:bg-primary/90 transition-all"
+                     shadow-lg hover:shadow-primary/25 hover:bg-primary/90 transition-all
+                     disabled:opacity-50 disabled:pointer-events-none"
           >
-            Start Game
+            {gameMode === 'practice' ? 'Start Practice' : 'Start Game'}
           </button>
         </div>
       ) : (

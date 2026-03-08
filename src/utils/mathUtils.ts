@@ -1,6 +1,7 @@
 
 export type Operation = 'addition' | 'subtraction' | 'multiplication' | 'division' | 'multiplication_table' | 'rounding' | 'comparing' | 'fractions';
 export type Difficulty = 'easy' | 'medium' | 'hard';
+export type GameMode = 'single' | 'practice';
 
 export interface Question {
   num1: number;
@@ -24,7 +25,7 @@ const difficultyRanges: Record<Difficulty, DifficultyRange> = {
 
 const randInt = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;
 
-export const generateQuestion = (operation: Operation, difficulty: Difficulty): Question => {
+export const generateQuestion = (operation: Operation, difficulty: Difficulty, selectedTable?: number | null): Question => {
   const { min, max } = difficultyRanges[difficulty];
 
   switch (operation) {
@@ -50,7 +51,6 @@ export const generateQuestion = (operation: Operation, difficulty: Difficulty): 
     }
 
     case 'division': {
-      // Generate divisible pairs
       const divisors = { easy: [1,2,3,4,5], medium: [2,3,4,5,6,7,8,9], hard: [3,4,5,6,7,8,9,10,11,12] };
       const divList = divisors[difficulty];
       const num2 = divList[randInt(0, divList.length - 1)];
@@ -60,7 +60,7 @@ export const generateQuestion = (operation: Operation, difficulty: Difficulty): 
     }
 
     case 'multiplication_table': {
-      const table = randInt(1, 12);
+      const table = selectedTable ?? randInt(1, 12);
       const multiplier = randInt(1, 12);
       return { num1: table, num2: multiplier, operation, correctAnswer: table * multiplier };
     }
@@ -79,7 +79,6 @@ export const generateQuestion = (operation: Operation, difficulty: Difficulty): 
     case 'comparing': {
       const num1 = randInt(min, max * 5);
       let num2 = randInt(min, max * 5);
-      // Occasionally make them equal
       if (Math.random() < 0.15) num2 = num1;
       const answer = num1 > num2 ? 1 : num1 < num2 ? -1 : 0;
       return {
@@ -94,7 +93,6 @@ export const generateQuestion = (operation: Operation, difficulty: Difficulty): 
     }
 
     case 'fractions': {
-      // "What is the missing numerator? num1/num2 = ?/multipliedDenom"
       const denoms = difficulty === 'easy' ? [2,3,4] : difficulty === 'medium' ? [2,3,4,5,6] : [2,3,4,5,6,8,10];
       const denom = denoms[randInt(0, denoms.length - 1)];
       const numer = randInt(1, denom - 1);

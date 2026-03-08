@@ -8,14 +8,33 @@ interface GameStatsProps {
   timeLeft: number;
   maxTime: number;
   timerEnabled: boolean;
+  sessionTimeLeft?: number | null;
 }
 
-const GameStats = ({ score, streak, timeLeft, maxTime, timerEnabled }: GameStatsProps) => {
+const formatTime = (seconds: number) => {
+  const m = Math.floor(seconds / 60);
+  const s = Math.ceil(seconds % 60);
+  return `${m}:${s.toString().padStart(2, '0')}`;
+};
+
+const GameStats = ({ score, streak, timeLeft, maxTime, timerEnabled, sessionTimeLeft }: GameStatsProps) => {
   const animatedScore = useAnimatedNumber(score);
   const animatedStreak = useAnimatedNumber(streak);
 
   return (
-    <div className="game-stats-card animate-fade">
+    <div className="game-stats-card animate-fade space-y-3">
+      {/* Session timer for practice mode */}
+      {sessionTimeLeft != null && (
+        <div className="text-center">
+          <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Session Time</p>
+          <p className={`text-2xl font-bold tabular-nums ${
+            sessionTimeLeft < 60 ? 'text-destructive' : 'text-primary'
+          }`}>
+            {formatTime(sessionTimeLeft)}
+          </p>
+        </div>
+      )}
+
       <div className="grid grid-cols-3 gap-4">
         <div className="text-center">
           <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Score</p>
