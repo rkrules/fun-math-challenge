@@ -203,7 +203,7 @@ const MathGame = () => {
             streak={streak} 
             timeLeft={timeLeft} 
             maxTime={timePerQuestion}
-            timerEnabled={gameMode === 'single' && timerEnabled}
+            timerEnabled={timerEnabled}
             sessionTimeLeft={gameMode === 'practice' ? sessionTimeLeft : null}
           />
           <QuestionCard 
