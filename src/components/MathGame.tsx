@@ -160,6 +160,7 @@ const MathGame = () => {
       }
     } else {
       setStreak(0);
+      setWrongAnswers(prev => [...prev, { question: currentQuestion, userAnswer: answer }]);
       if (soundEnabled) playIncorrectSound();
       toast.error(`Incorrect! The answer is ${currentQuestion.correctAnswer}`);
     }
