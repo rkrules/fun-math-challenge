@@ -18,9 +18,11 @@ interface GameControlsProps {
   canStart: boolean;
   soundEnabled: boolean;
   onToggleSound: (enabled: boolean) => void;
+  aiCoachEnabled: boolean;
+  onToggleAiCoach: (enabled: boolean) => void;
 }
 
-const GameControls = ({ 
+const GameControls = ({
   difficulty, onChangeDifficulty, 
   onStartGame, onEndGame, isGameActive,
   timerEnabled, onToggleTimer,
