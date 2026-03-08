@@ -101,6 +101,7 @@ const MathGame = () => {
     if (!currentQuestion) return;
     setShowFeedback(true);
     setIsAnswerCorrect(false);
+    setWrongAnswers(prev => [...prev, { question: currentQuestion, userAnswer: 0 }]);
     setStreak(0);
     setTotalQuestions(prev => prev + 1);
     setTotalTime(prev => prev + timePerQuestion);
