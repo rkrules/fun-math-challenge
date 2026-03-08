@@ -176,8 +176,8 @@ const MathGame = () => {
   const canStart = gameMode === 'single' || selectedOperations.length > 0;
 
   return (
-    <div className="w-full max-w-4xl mx-auto p-4 space-y-8">
-      <h1 className="text-3xl font-bold text-center">Math Practice</h1>
+    <div className={`w-full max-w-4xl mx-auto p-4 space-y-8 ${squishmallowMode ? 'squishmallow' : ''}`}>
+      <h1 className="text-3xl font-bold text-center">{squishmallowMode ? '🧸 Squishy Math 🧸' : 'Math Practice'}</h1>
       
       {!isGameActive && !isGameOver && (
         <OperationSelector 
