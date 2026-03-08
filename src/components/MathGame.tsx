@@ -57,12 +57,6 @@ const MathGame = () => {
     setShowFeedback(false);
   }, [getRandomOperation, difficulty, timePerQuestion, selectedTable]);
 
-  // Init game
-  useEffect(() => {
-    if (isGameActive && !isGameOver) {
-      generateNewQuestion();
-    }
-  }, [isGameActive, isGameOver, generateNewQuestion]);
 
   // Per-question timer
   useEffect(() => {
@@ -125,6 +119,9 @@ const MathGame = () => {
     if (gameMode === 'practice') {
       setSessionTimeLeft(sessionDuration);
     }
+    setTimeout(() => {
+      generateNewQuestion();
+    }, 0);
     toast.success(gameMode === 'practice' ? "Practice round started!" : "Game started! Good luck!");
   };
 
