@@ -80,7 +80,7 @@ const MathGame = () => {
       }, 100);
     }
     return () => { if (timer) clearInterval(timer); };
-  }, [isGameActive, isGameOver, showFeedback, timeLeft, timerEnabled, gameMode]);
+  }, [isGameActive, isGameOver, showFeedback, timeLeft, timerEnabled]);
 
   // Session timer (practice mode)
   useEffect(() => {
