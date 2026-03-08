@@ -119,6 +119,9 @@ const MathGame = () => {
     if (gameMode === 'practice') {
       setSessionTimeLeft(sessionDuration);
     }
+    setTimeout(() => {
+      generateNewQuestion();
+    }, 0);
     toast.success(gameMode === 'practice' ? "Practice round started!" : "Game started! Good luck!");
   };
 
