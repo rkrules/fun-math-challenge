@@ -13,6 +13,8 @@ interface OperationSelectorProps {
   onSelectTable: (table: number | null) => void;
   sessionDuration: number;
   onChangeSessionDuration: (duration: number) => void;
+  squishmallowMode: boolean;
+  onToggleSquishmallowMode: (enabled: boolean) => void;
 }
 
 const operations: { id: Operation; label: string; icon: React.ReactNode }[] = [
