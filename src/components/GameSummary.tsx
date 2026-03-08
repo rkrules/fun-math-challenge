@@ -14,6 +14,8 @@ interface GameSummaryProps {
   onPlayAgain: () => void;
   gameMode: GameMode;
   selectedOperations: Operation[];
+  aiCoachEnabled: boolean;
+  wrongAnswers: { question: any, userAnswer: number }[];
 }
 
 const GameSummary = ({
