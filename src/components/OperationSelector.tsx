@@ -36,6 +36,7 @@ const OperationSelector = ({
   selectedOperations, onToggleOperation,
   selectedTable, onSelectTable,
   sessionDuration, onChangeSessionDuration,
+  squishmallowMode, onToggleSquishmallowMode,
 }: OperationSelectorProps) => {
   const showTableSelector = gameMode === 'single'
     ? selectedOperation === 'multiplication_table'
