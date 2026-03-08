@@ -13,6 +13,8 @@ interface OperationSelectorProps {
   onSelectTable: (table: number | null) => void;
   sessionDuration: number;
   onChangeSessionDuration: (duration: number) => void;
+  squishmallowMode: boolean;
+  onToggleSquishmallowMode: (enabled: boolean) => void;
 }
 
 const operations: { id: Operation; label: string; icon: React.ReactNode }[] = [
@@ -34,6 +36,7 @@ const OperationSelector = ({
   selectedOperations, onToggleOperation,
   selectedTable, onSelectTable,
   sessionDuration, onChangeSessionDuration,
+  squishmallowMode, onToggleSquishmallowMode,
 }: OperationSelectorProps) => {
   const showTableSelector = gameMode === 'single'
     ? selectedOperation === 'multiplication_table'
@@ -149,6 +152,20 @@ const OperationSelector = ({
           </div>
         </div>
       )}
+
+      {/* Squishmallow Mode toggle */}
+      <div className="flex items-center justify-center gap-3 pt-2">
+        <button
+          onClick={() => onToggleSquishmallowMode(!squishmallowMode)}
+          className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all ${
+            squishmallowMode
+              ? 'bg-pink-200 text-pink-800 shadow-md ring-2 ring-pink-300'
+              : 'bg-muted text-muted-foreground hover:bg-muted/80'
+          }`}
+        >
+          🧸 Squishmallow Mode
+        </button>
+      </div>
     </div>
   );
 };

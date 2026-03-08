@@ -2,6 +2,7 @@
 import { Difficulty, GameMode } from '../utils/mathUtils';
 import { Switch } from './ui/switch';
 import { Slider } from './ui/slider';
+import { Volume2, VolumeX } from 'lucide-react';
 
 interface GameControlsProps {
   difficulty: Difficulty;
@@ -15,6 +16,8 @@ interface GameControlsProps {
   onChangeTime: (time: number) => void;
   gameMode: GameMode;
   canStart: boolean;
+  soundEnabled: boolean;
+  onToggleSound: (enabled: boolean) => void;
 }
 
 const GameControls = ({ 
@@ -23,6 +26,7 @@ const GameControls = ({
   timerEnabled, onToggleTimer,
   timePerQuestion, onChangeTime,
   gameMode, canStart,
+  soundEnabled, onToggleSound,
 }: GameControlsProps) => {
   return (
     <div className="w-full max-w-md mx-auto animate-scale-in">
@@ -46,32 +50,43 @@ const GameControls = ({
             </div>
           </div>
 
-          {/* Per-question timer (shown in single mode, or optionally in practice) */}
-          {gameMode === 'single' && (
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <label className="text-sm text-muted-foreground uppercase tracking-wider">
-                  Timer
-                </label>
-                <Switch checked={timerEnabled} onCheckedChange={onToggleTimer} />
-              </div>
-              {timerEnabled && (
-                <div className="flex items-center gap-3">
-                  <Slider
-                    min={5}
-                    max={60}
-                    step={5}
-                    value={[timePerQuestion]}
-                    onValueChange={([v]) => onChangeTime(v)}
-                    className="flex-1"
-                  />
-                  <span className="text-sm font-medium text-muted-foreground w-10 text-right">
-                    {timePerQuestion}s
-                  </span>
-                </div>
-              )}
+          {/* Per-question timer */}
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <label className="text-sm text-muted-foreground uppercase tracking-wider">
+                Timer
+              </label>
+              <Switch checked={timerEnabled} onCheckedChange={onToggleTimer} />
             </div>
-          )}
+            {timerEnabled && (
+              <div className="flex items-center gap-3">
+                <Slider
+                  min={5}
+                  max={60}
+                  step={5}
+                  value={[timePerQuestion]}
+                  onValueChange={([v]) => onChangeTime(v)}
+                  className="flex-1"
+                />
+                <span className="text-sm font-medium text-muted-foreground w-10 text-right">
+                  {timePerQuestion}s
+                </span>
+              </div>
+            )}
+          </div>
+
+          {/* Sound toggle */}
+          <div className="flex items-center justify-between">
+            <label className="text-sm text-muted-foreground uppercase tracking-wider">
+              Sound
+            </label>
+            <button
+              onClick={() => onToggleSound(!soundEnabled)}
+              className="p-2 rounded-lg hover:bg-muted transition-colors"
+            >
+              {soundEnabled ? <Volume2 size={20} /> : <VolumeX size={20} className="text-muted-foreground" />}
+            </button>
+          </div>
           
           <button
             onClick={onStartGame}

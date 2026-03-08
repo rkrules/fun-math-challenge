@@ -10,6 +10,7 @@ import {
   Operation, Difficulty, Question, GameMode,
   generateQuestion, calculatePoints 
 } from '../utils/mathUtils';
+import { playCorrectSound, playIncorrectSound, playStreakSound, playTimeoutSound } from '../utils/sounds';
 
 const MathGame = () => {
   // Game configuration
@@ -22,8 +23,10 @@ const MathGame = () => {
   const [gameMode, setGameMode] = useState<GameMode>('single');
   const [selectedOperations, setSelectedOperations] = useState<Operation[]>([]);
   const [selectedTable, setSelectedTable] = useState<number | null>(null);
-  const [sessionDuration, setSessionDuration] = useState(10 * 60); // seconds
+  const [sessionDuration, setSessionDuration] = useState(10 * 60);
   const [sessionTimeLeft, setSessionTimeLeft] = useState(0);
+  const [soundEnabled, setSoundEnabled] = useState(true);
+  const [squishmallowMode, setSquishmallowMode] = useState(false);
 
   // Game progress
   const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
@@ -64,8 +67,7 @@ const MathGame = () => {
   // Per-question timer
   useEffect(() => {
     let timer: number | undefined;
-    const shouldRunTimer = gameMode === 'single' && timerEnabled;
-    if (shouldRunTimer && isGameActive && !isGameOver && !showFeedback && timeLeft > 0) {
+    if (timerEnabled && isGameActive && !isGameOver && !showFeedback && timeLeft > 0) {
       timer = window.setInterval(() => {
         setTimeLeft(prev => {
           if (prev <= 0) {
@@ -78,7 +80,7 @@ const MathGame = () => {
       }, 100);
     }
     return () => { if (timer) clearInterval(timer); };
-  }, [isGameActive, isGameOver, showFeedback, timeLeft, timerEnabled, gameMode]);
+  }, [isGameActive, isGameOver, showFeedback, timeLeft, timerEnabled]);
 
   // Session timer (practice mode)
   useEffect(() => {
@@ -106,6 +108,7 @@ const MathGame = () => {
     setStreak(0);
     setTotalQuestions(prev => prev + 1);
     setTotalTime(prev => prev + timePerQuestion);
+    if (soundEnabled) playTimeoutSound();
     toast.error("Time's up!");
     setTimeout(() => generateNewQuestion(), 2000);
   };
@@ -133,7 +136,7 @@ const MathGame = () => {
   const handleAnswer = (answer: number) => {
     if (!currentQuestion || showFeedback) return;
     const isCorrect = answer === currentQuestion.correctAnswer;
-    const timeTaken = (gameMode === 'single' && timerEnabled) ? timePerQuestion - timeLeft : 0;
+    const timeTaken = timerEnabled ? timePerQuestion - timeLeft : 0;
     
     setIsAnswerCorrect(isCorrect);
     setShowFeedback(true);
@@ -148,12 +151,15 @@ const MathGame = () => {
       setScore(prev => prev + points);
       setCorrectAnswers(prev => prev + 1);
       if (newStreak > 0 && newStreak % 5 === 0) {
+        if (soundEnabled) playStreakSound();
         toast.success(`${newStreak} streak! Multiplier increased!`);
       } else {
+        if (soundEnabled) playCorrectSound();
         toast.success(`Correct! +${points} points`);
       }
     } else {
       setStreak(0);
+      if (soundEnabled) playIncorrectSound();
       toast.error(`Incorrect! The answer is ${currentQuestion.correctAnswer}`);
     }
     setTimeout(() => generateNewQuestion(), 2000);
@@ -170,8 +176,8 @@ const MathGame = () => {
   const canStart = gameMode === 'single' || selectedOperations.length > 0;
 
   return (
-    <div className="w-full max-w-4xl mx-auto p-4 space-y-8">
-      <h1 className="text-3xl font-bold text-center">Math Practice</h1>
+    <div className={`w-full max-w-4xl mx-auto p-4 space-y-8 ${squishmallowMode ? 'squishmallow' : ''}`}>
+      <h1 className="text-3xl font-bold text-center">{squishmallowMode ? '🧸 Squishy Math 🧸' : 'Math Practice'}</h1>
       
       {!isGameActive && !isGameOver && (
         <OperationSelector 
@@ -185,6 +191,8 @@ const MathGame = () => {
           onSelectTable={setSelectedTable}
           sessionDuration={sessionDuration}
           onChangeSessionDuration={setSessionDuration}
+          squishmallowMode={squishmallowMode}
+          onToggleSquishmallowMode={setSquishmallowMode}
         />
       )}
       
@@ -195,14 +203,15 @@ const MathGame = () => {
             streak={streak} 
             timeLeft={timeLeft} 
             maxTime={timePerQuestion}
-            timerEnabled={gameMode === 'single' && timerEnabled}
+            timerEnabled={timerEnabled}
             sessionTimeLeft={gameMode === 'practice' ? sessionTimeLeft : null}
           />
           <QuestionCard 
             question={currentQuestion} 
             onAnswer={handleAnswer} 
             isAnswerCorrect={isAnswerCorrect} 
-            showFeedback={showFeedback} 
+            showFeedback={showFeedback}
+            squishmallowMode={squishmallowMode}
           />
         </div>
       )}
@@ -237,6 +246,8 @@ const MathGame = () => {
         onChangeTime={setTimePerQuestion}
         gameMode={gameMode}
         canStart={canStart}
+        soundEnabled={soundEnabled}
+        onToggleSound={setSoundEnabled}
       />
     </div>
   );
