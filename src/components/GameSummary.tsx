@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from 'react';
-import { Difficulty, Operation, getOperationName } from '../utils/mathUtils';
+import { Difficulty, Operation, GameMode, getOperationName } from '../utils/mathUtils';
 import { useTypingEffect } from '../utils/animations';
 
 interface GameSummaryProps {
@@ -12,11 +12,13 @@ interface GameSummaryProps {
   difficulty: Difficulty;
   operation: Operation;
   onPlayAgain: () => void;
+  gameMode: GameMode;
+  selectedOperations: Operation[];
 }
 
 const GameSummary = ({
   score, totalQuestions, correctAnswers, maxStreak, averageTime,
-  difficulty, operation, onPlayAgain
+  difficulty, operation, onPlayAgain, gameMode, selectedOperations,
 }: GameSummaryProps) => {
   const [showPlayAgain, setShowPlayAgain] = useState(false);
   const accuracy = totalQuestions > 0 ? Math.round((correctAnswers / totalQuestions) * 100) : 0;
@@ -44,6 +46,10 @@ const GameSummary = ({
     }
   };
 
+  const modeLabel = gameMode === 'practice'
+    ? `Practice Round • ${selectedOperations.map(getOperationName).join(', ')}`
+    : `${getOperationName(operation)} • ${getDifficultyName(difficulty)}`;
+
   return (
     <div className="backdrop-blur-md bg-white/90 shadow-xl rounded-2xl p-8 max-w-md w-full
                   border border-white/40 animate-scale-in space-y-6 mx-auto">
@@ -69,9 +75,7 @@ const GameSummary = ({
       </div>
       
       <div className="space-y-2 text-center">
-        <p className="text-sm text-muted-foreground">
-          {getOperationName(operation)} • {getDifficultyName(difficulty)}
-        </p>
+        <p className="text-sm text-muted-foreground">{modeLabel}</p>
         <p className="text-sm">
           You answered <span className="font-semibold">{correctAnswers}</span> out of{" "}
           <span className="font-semibold">{totalQuestions}</span> questions correctly.
