@@ -67,8 +67,7 @@ const MathGame = () => {
   // Per-question timer
   useEffect(() => {
     let timer: number | undefined;
-    const shouldRunTimer = gameMode === 'single' && timerEnabled;
-    if (shouldRunTimer && isGameActive && !isGameOver && !showFeedback && timeLeft > 0) {
+    if (timerEnabled && isGameActive && !isGameOver && !showFeedback && timeLeft > 0) {
       timer = window.setInterval(() => {
         setTimeLeft(prev => {
           if (prev <= 0) {
