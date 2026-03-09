@@ -3,6 +3,7 @@ import { Difficulty, GameMode } from '../utils/mathUtils';
 import { Switch } from './ui/switch';
 import { Slider } from './ui/slider';
 import { Volume2, VolumeX } from 'lucide-react';
+import { FEATURES } from '../config/features';
 
 interface GameControlsProps {
   difficulty: Difficulty;
