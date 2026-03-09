@@ -55,11 +55,17 @@ const MathGame = () => {
     const op = getRandomOperation();
     const table = op === 'multiplication_table' ? selectedTable : undefined;
     const newQuestion = generateQuestion(op, difficulty, table);
+    
+    // Add multiple choice options if enabled and question doesn't already have options
+    if (multipleChoiceEnabled && !newQuestion.options) {
+      newQuestion.options = generateMultipleChoiceOptions(newQuestion.correctAnswer);
+    }
+    
     setCurrentQuestion(newQuestion);
     setTimeLeft(timePerQuestion);
     setIsAnswerCorrect(null);
     setShowFeedback(false);
-  }, [getRandomOperation, difficulty, timePerQuestion, selectedTable]);
+  }, [getRandomOperation, difficulty, timePerQuestion, selectedTable, multipleChoiceEnabled]);
 
 
   // Per-question timer
