@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { Difficulty, Operation, GameMode, getOperationName } from '../utils/mathUtils';
 import { useTypingEffect } from '../utils/animations';
 import CoachReview from './CoachReview';
+import { FEATURES } from '../config/features';
 
 interface GameSummaryProps {
   score: number;
@@ -90,7 +91,7 @@ const GameSummary = ({
         <p className="text-sm text-foreground min-h-[3rem]">{message}</p>
       </div>
 
-      {showPlayAgain && aiCoachEnabled && wrongAnswers.length > 0 && (
+      {showPlayAgain && FEATURES.AI_COACH_ENABLED && aiCoachEnabled && wrongAnswers.length > 0 && (
         <CoachReview wrongAnswers={wrongAnswers} />
       )}
       

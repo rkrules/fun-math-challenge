@@ -11,6 +11,7 @@ import {
   generateQuestion, calculatePoints 
 } from '../utils/mathUtils';
 import { playCorrectSound, playIncorrectSound, playStreakSound, playTimeoutSound } from '../utils/sounds';
+import { FEATURES } from '../config/features';
 
 const MathGame = () => {
   // Game configuration
@@ -27,7 +28,7 @@ const MathGame = () => {
   const [sessionTimeLeft, setSessionTimeLeft] = useState(0);
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [squishmallowMode, setSquishmallowMode] = useState(false);
-  const [aiCoachEnabled, setAiCoachEnabled] = useState(true);
+  const [aiCoachEnabled, setAiCoachEnabled] = useState<boolean>(FEATURES.AI_COACH_ENABLED);
 
   // Game progress
   const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
