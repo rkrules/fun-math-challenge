@@ -8,7 +8,7 @@ import GameSummary from './GameSummary';
 import OperationSelector from './OperationSelector';
 import { 
   Operation, Difficulty, Question, GameMode,
-  generateQuestion, calculatePoints 
+  generateQuestion, calculatePoints, generateMultipleChoiceOptions 
 } from '../utils/mathUtils';
 import { playCorrectSound, playIncorrectSound, playStreakSound, playTimeoutSound } from '../utils/sounds';
 import { FEATURES } from '../config/features';
