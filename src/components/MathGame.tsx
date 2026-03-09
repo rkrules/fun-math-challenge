@@ -262,6 +262,8 @@ const MathGame = () => {
         onToggleSound={setSoundEnabled}
         aiCoachEnabled={aiCoachEnabled}
         onToggleAiCoach={setAiCoachEnabled}
+        multipleChoiceEnabled={multipleChoiceEnabled}
+        onToggleMultipleChoice={setMultipleChoiceEnabled}
       />
     </div>
   );

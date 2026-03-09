@@ -95,6 +95,14 @@ const GameControls = ({
             </button>
           </div>
 
+          {/* Multiple Choice toggle */}
+          <div className="flex items-center justify-between">
+            <label className="text-sm text-muted-foreground uppercase tracking-wider">
+              Multiple Choice
+            </label>
+            <Switch checked={multipleChoiceEnabled} onCheckedChange={onToggleMultipleChoice} />
+          </div>
+
           {/* AI Coach toggle */}
           {FEATURES.AI_COACH_ENABLED && (
             <div className="flex items-center justify-between">
