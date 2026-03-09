@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { Difficulty, Operation, GameMode, getOperationName } from '../utils/mathUtils';
 import { useTypingEffect } from '../utils/animations';
 import CoachReview from './CoachReview';
+import { FEATURES } from '../config/features';
 
 interface GameSummaryProps {
   score: number;
