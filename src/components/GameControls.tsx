@@ -33,6 +33,7 @@ const GameControls = ({
   gameMode, canStart,
   soundEnabled, onToggleSound,
   aiCoachEnabled, onToggleAiCoach,
+  multipleChoiceEnabled, onToggleMultipleChoice,
 }: GameControlsProps) => {
   return (
     <div className="w-full max-w-md mx-auto animate-scale-in">
