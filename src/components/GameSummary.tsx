@@ -91,7 +91,7 @@ const GameSummary = ({
         <p className="text-sm text-foreground min-h-[3rem]">{message}</p>
       </div>
 
-      {showPlayAgain && aiCoachEnabled && wrongAnswers.length > 0 && (
+      {showPlayAgain && FEATURES.AI_COACH_ENABLED && aiCoachEnabled && wrongAnswers.length > 0 && (
         <CoachReview wrongAnswers={wrongAnswers} />
       )}
       

@@ -93,12 +93,14 @@ const GameControls = ({
           </div>
 
           {/* AI Coach toggle */}
-          <div className="flex items-center justify-between">
-            <label className="text-sm text-muted-foreground uppercase tracking-wider">
-              AI Coach
-            </label>
-            <Switch checked={aiCoachEnabled} onCheckedChange={onToggleAiCoach} />
-          </div>
+          {FEATURES.AI_COACH_ENABLED && (
+            <div className="flex items-center justify-between">
+              <label className="text-sm text-muted-foreground uppercase tracking-wider">
+                AI Coach
+              </label>
+              <Switch checked={aiCoachEnabled} onCheckedChange={onToggleAiCoach} />
+            </div>
+          )}
           
           <button
             onClick={onStartGame}
