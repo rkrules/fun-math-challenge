@@ -150,3 +150,39 @@ export const calculatePoints = (
   
   return Math.round((basePoints + timeBonus) * streakMultiplier);
 };
+
+export const generateMultipleChoiceOptions = (correctAnswer: number): { label: string; value: number }[] => {
+  const options = new Set<number>([correctAnswer]);
+  
+  // Generate distractors based on common mistake patterns
+  const distractors = [
+    correctAnswer + 1,
+    correctAnswer - 1,
+    correctAnswer + 2,
+    correctAnswer - 2,
+    correctAnswer + 10,
+    correctAnswer - 10,
+    correctAnswer + 5,
+    correctAnswer * 2,
+    Math.floor(correctAnswer / 2),
+  ].filter(n => n >= 0 && n !== correctAnswer);
+  
+  // Shuffle and pick 3 unique distractors
+  const shuffled = distractors.sort(() => Math.random() - 0.5);
+  for (const d of shuffled) {
+    if (options.size >= 4) break;
+    options.add(d);
+  }
+  
+  // If we still need more, generate random nearby values
+  while (options.size < 4) {
+    const offset = Math.floor(Math.random() * 10) + 1;
+    const candidate = Math.random() > 0.5 ? correctAnswer + offset : Math.max(0, correctAnswer - offset);
+    if (!options.has(candidate)) options.add(candidate);
+  }
+  
+  // Convert to array and shuffle
+  return Array.from(options)
+    .sort(() => Math.random() - 0.5)
+    .map(value => ({ label: String(value), value }));
+};

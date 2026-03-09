@@ -8,7 +8,7 @@ import GameSummary from './GameSummary';
 import OperationSelector from './OperationSelector';
 import { 
   Operation, Difficulty, Question, GameMode,
-  generateQuestion, calculatePoints 
+  generateQuestion, calculatePoints, generateMultipleChoiceOptions 
 } from '../utils/mathUtils';
 import { playCorrectSound, playIncorrectSound, playStreakSound, playTimeoutSound } from '../utils/sounds';
 import { FEATURES } from '../config/features';
@@ -29,6 +29,7 @@ const MathGame = () => {
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [squishmallowMode, setSquishmallowMode] = useState(false);
   const [aiCoachEnabled, setAiCoachEnabled] = useState<boolean>(FEATURES.AI_COACH_ENABLED);
+  const [multipleChoiceEnabled, setMultipleChoiceEnabled] = useState(false);
 
   // Game progress
   const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
@@ -54,11 +55,17 @@ const MathGame = () => {
     const op = getRandomOperation();
     const table = op === 'multiplication_table' ? selectedTable : undefined;
     const newQuestion = generateQuestion(op, difficulty, table);
+    
+    // Add multiple choice options if enabled and question doesn't already have options
+    if (multipleChoiceEnabled && !newQuestion.options) {
+      newQuestion.options = generateMultipleChoiceOptions(newQuestion.correctAnswer);
+    }
+    
     setCurrentQuestion(newQuestion);
     setTimeLeft(timePerQuestion);
     setIsAnswerCorrect(null);
     setShowFeedback(false);
-  }, [getRandomOperation, difficulty, timePerQuestion, selectedTable]);
+  }, [getRandomOperation, difficulty, timePerQuestion, selectedTable, multipleChoiceEnabled]);
 
 
   // Per-question timer
@@ -255,6 +262,8 @@ const MathGame = () => {
         onToggleSound={setSoundEnabled}
         aiCoachEnabled={aiCoachEnabled}
         onToggleAiCoach={setAiCoachEnabled}
+        multipleChoiceEnabled={multipleChoiceEnabled}
+        onToggleMultipleChoice={setMultipleChoiceEnabled}
       />
     </div>
   );
