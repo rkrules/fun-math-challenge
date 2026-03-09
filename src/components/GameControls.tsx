@@ -21,6 +21,8 @@ interface GameControlsProps {
   onToggleSound: (enabled: boolean) => void;
   aiCoachEnabled: boolean;
   onToggleAiCoach: (enabled: boolean) => void;
+  multipleChoiceEnabled: boolean;
+  onToggleMultipleChoice: (enabled: boolean) => void;
 }
 
 const GameControls = ({
