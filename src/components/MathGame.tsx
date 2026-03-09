@@ -28,7 +28,7 @@ const MathGame = () => {
   const [sessionTimeLeft, setSessionTimeLeft] = useState(0);
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [squishmallowMode, setSquishmallowMode] = useState(false);
-  const [aiCoachEnabled, setAiCoachEnabled] = useState(FEATURES.AI_COACH_ENABLED);
+  const [aiCoachEnabled, setAiCoachEnabled] = useState<boolean>(FEATURES.AI_COACH_ENABLED);
 
   // Game progress
   const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
