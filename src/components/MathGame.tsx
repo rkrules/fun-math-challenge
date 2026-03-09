@@ -29,6 +29,7 @@ const MathGame = () => {
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [squishmallowMode, setSquishmallowMode] = useState(false);
   const [aiCoachEnabled, setAiCoachEnabled] = useState<boolean>(FEATURES.AI_COACH_ENABLED);
+  const [multipleChoiceEnabled, setMultipleChoiceEnabled] = useState(false);
 
   // Game progress
   const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
