@@ -14,7 +14,51 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      game_sessions: {
+        Row: {
+          accuracy: number
+          avg_time_ms: number
+          correct_count: number
+          difficulty: string
+          id: string
+          max_streak: number
+          mode: string
+          operation: string
+          played_at: string
+          score: number
+          total_count: number
+          user_id: string
+        }
+        Insert: {
+          accuracy?: number
+          avg_time_ms?: number
+          correct_count?: number
+          difficulty: string
+          id?: string
+          max_streak?: number
+          mode: string
+          operation: string
+          played_at?: string
+          score?: number
+          total_count?: number
+          user_id: string
+        }
+        Update: {
+          accuracy?: number
+          avg_time_ms?: number
+          correct_count?: number
+          difficulty?: string
+          id?: string
+          max_streak?: number
+          mode?: string
+          operation?: string
+          played_at?: string
+          score?: number
+          total_count?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
