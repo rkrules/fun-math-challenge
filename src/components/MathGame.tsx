@@ -1,5 +1,5 @@
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { toast } from 'sonner';
 import QuestionCard from './QuestionCard';
 import GameStats from './GameStats';
@@ -12,6 +12,9 @@ import {
 } from '../utils/mathUtils';
 import { playCorrectSound, playIncorrectSound, playStreakSound, playTimeoutSound } from '../utils/sounds';
 import { FEATURES } from '../config/features';
+import { useAuth } from '../contexts/AuthContext';
+import { saveSession } from '../utils/progressStore';
+import { nextDifficulty, RecentResult } from '../utils/adaptiveDifficulty';
 
 const MathGame = () => {
   // Game configuration
@@ -30,6 +33,11 @@ const MathGame = () => {
   const [squishmallowMode, setSquishmallowMode] = useState(false);
   const [aiCoachEnabled, setAiCoachEnabled] = useState<boolean>(FEATURES.AI_COACH_ENABLED);
   const [multipleChoiceEnabled, setMultipleChoiceEnabled] = useState(false);
+  const [adaptiveEnabled, setAdaptiveEnabled] = useState(false);
+  const [adaptiveDifficulty, setAdaptiveDifficulty] = useState<Difficulty>('easy');
+  const recentResults = useRef<RecentResult[]>([]);
+  const { user } = useAuth();
+  const sessionSavedRef = useRef(false);
 
   // Game progress
   const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
@@ -54,9 +62,15 @@ const MathGame = () => {
   const generateNewQuestion = useCallback(() => {
     const op = getRandomOperation();
     const table = op === 'multiplication_table' ? selectedTable : undefined;
-    const newQuestion = generateQuestion(op, difficulty, table);
+    const effectiveDifficulty = adaptiveEnabled
+      ? nextDifficulty(adaptiveDifficulty, recentResults.current)
+      : difficulty;
+    if (adaptiveEnabled && effectiveDifficulty !== adaptiveDifficulty) {
+      setAdaptiveDifficulty(effectiveDifficulty);
+      toast.info(`Difficulty: ${effectiveDifficulty}`, { duration: 1500 });
+    }
+    const newQuestion = generateQuestion(op, effectiveDifficulty, table);
     
-    // Add multiple choice options if enabled and question doesn't already have options
     if (multipleChoiceEnabled && !newQuestion.options) {
       newQuestion.options = generateMultipleChoiceOptions(newQuestion.correctAnswer);
     }
@@ -65,7 +79,7 @@ const MathGame = () => {
     setTimeLeft(timePerQuestion);
     setIsAnswerCorrect(null);
     setShowFeedback(false);
-  }, [getRandomOperation, difficulty, timePerQuestion, selectedTable, multipleChoiceEnabled]);
+  }, [getRandomOperation, difficulty, timePerQuestion, selectedTable, multipleChoiceEnabled, adaptiveEnabled, adaptiveDifficulty]);
 
 
   // Per-question timer
