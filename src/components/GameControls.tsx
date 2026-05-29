@@ -23,6 +23,8 @@ interface GameControlsProps {
   onToggleAiCoach: (enabled: boolean) => void;
   multipleChoiceEnabled: boolean;
   onToggleMultipleChoice: (enabled: boolean) => void;
+  adaptiveEnabled: boolean;
+  onToggleAdaptive: (enabled: boolean) => void;
 }
 
 const GameControls = ({
@@ -34,6 +36,7 @@ const GameControls = ({
   soundEnabled, onToggleSound,
   aiCoachEnabled, onToggleAiCoach,
   multipleChoiceEnabled, onToggleMultipleChoice,
+  adaptiveEnabled, onToggleAdaptive,
 }: GameControlsProps) => {
   return (
     <div className="w-full max-w-md mx-auto animate-scale-in">
@@ -101,6 +104,17 @@ const GameControls = ({
               Multiple Choice
             </label>
             <Switch checked={multipleChoiceEnabled} onCheckedChange={onToggleMultipleChoice} />
+          </div>
+
+          {/* Adaptive Difficulty toggle */}
+          <div className="flex items-center justify-between">
+            <div>
+              <label className="text-sm text-muted-foreground uppercase tracking-wider">
+                Adaptive Difficulty
+              </label>
+              <p className="text-xs text-muted-foreground/70">Adjusts to your performance</p>
+            </div>
+            <Switch checked={adaptiveEnabled} onCheckedChange={onToggleAdaptive} />
           </div>
 
           {/* AI Coach toggle */}
