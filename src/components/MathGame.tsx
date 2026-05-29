@@ -127,6 +127,7 @@ const MathGame = () => {
     setStreak(0);
     setTotalQuestions(prev => prev + 1);
     setTotalTime(prev => prev + timePerQuestion);
+    recentResults.current.push({ correct: false, timeMs: timePerQuestion * 1000 });
     if (soundEnabled) playTimeoutSound();
     toast.error("Time's up!");
     setTimeout(() => generateNewQuestion(), 2000);
@@ -142,6 +143,9 @@ const MathGame = () => {
     setCorrectAnswers(0);
     setTotalTime(0);
     setWrongAnswers([]);
+    recentResults.current = [];
+    sessionSavedRef.current = false;
+    setAdaptiveDifficulty(difficulty);
     if (gameMode === 'practice') {
       setSessionTimeLeft(sessionDuration);
     }
@@ -154,6 +158,23 @@ const MathGame = () => {
   const handleEndGame = () => {
     setIsGameActive(false);
     setIsGameOver(true);
+    // Persist session (once)
+    if (!sessionSavedRef.current && totalQuestions > 0) {
+      sessionSavedRef.current = true;
+      const avgTimeMs = totalQuestions > 0 ? Math.round((totalTime / totalQuestions) * 1000) : 0;
+      const accuracy = totalQuestions > 0 ? correctAnswers / totalQuestions : 0;
+      saveSession(user?.id ?? null, {
+        operation,
+        difficulty: adaptiveEnabled ? adaptiveDifficulty : difficulty,
+        mode: gameMode,
+        score,
+        correct_count: correctAnswers,
+        total_count: totalQuestions,
+        accuracy,
+        avg_time_ms: avgTimeMs,
+        max_streak: maxStreak,
+      }).catch(() => {});
+    }
   };
 
   const handleAnswer = (answer: number) => {
@@ -165,10 +186,11 @@ const MathGame = () => {
     setShowFeedback(true);
     setTotalQuestions(prev => prev + 1);
     setTotalTime(prev => prev + timeTaken);
+    recentResults.current.push({ correct: isCorrect, timeMs: Math.round(timeTaken * 1000) });
     
     if (isCorrect) {
       const newStreak = streak + 1;
-      const points = calculatePoints(true, timeTaken, newStreak, difficulty);
+      const points = calculatePoints(true, timeTaken, newStreak, adaptiveEnabled ? adaptiveDifficulty : difficulty);
       setStreak(newStreak);
       setMaxStreak(prev => Math.max(prev, newStreak));
       setScore(prev => prev + points);
@@ -278,6 +300,8 @@ const MathGame = () => {
         onToggleAiCoach={setAiCoachEnabled}
         multipleChoiceEnabled={multipleChoiceEnabled}
         onToggleMultipleChoice={setMultipleChoiceEnabled}
+        adaptiveEnabled={adaptiveEnabled}
+        onToggleAdaptive={setAdaptiveEnabled}
       />
     </div>
   );
