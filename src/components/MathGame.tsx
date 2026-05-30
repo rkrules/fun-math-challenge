@@ -13,8 +13,9 @@ import {
 import { playCorrectSound, playIncorrectSound, playStreakSound, playTimeoutSound } from '../utils/sounds';
 import { FEATURES } from '../config/features';
 import { useAuth } from '../contexts/AuthContext';
-import { saveSession } from '../utils/progressStore';
+import { saveSession, loadSessions } from '../utils/progressStore';
 import { nextDifficulty, RecentResult } from '../utils/adaptiveDifficulty';
+import { findNewBadges, markBadgesSeen } from '../utils/badges';
 
 const MathGame = () => {
   // Game configuration
@@ -163,17 +164,29 @@ const MathGame = () => {
       sessionSavedRef.current = true;
       const avgTimeMs = totalQuestions > 0 ? Math.round((totalTime / totalQuestions) * 1000) : 0;
       const accuracy = totalQuestions > 0 ? correctAnswers / totalQuestions : 0;
-      saveSession(user?.id ?? null, {
-        operation,
-        difficulty: adaptiveEnabled ? adaptiveDifficulty : difficulty,
-        mode: gameMode,
-        score,
-        correct_count: correctAnswers,
-        total_count: totalQuestions,
-        accuracy,
-        avg_time_ms: avgTimeMs,
-        max_streak: maxStreak,
-      }).catch(() => {});
+      (async () => {
+        try {
+          await saveSession(user?.id ?? null, {
+            operation,
+            difficulty: adaptiveEnabled ? adaptiveDifficulty : difficulty,
+            mode: gameMode,
+            score,
+            correct_count: correctAnswers,
+            total_count: totalQuestions,
+            accuracy,
+            avg_time_ms: avgTimeMs,
+            max_streak: maxStreak,
+          });
+          const rows = await loadSessions(user?.id ?? null);
+          const newBadges = findNewBadges(rows);
+          if (newBadges.length) {
+            markBadgesSeen(newBadges.map(b => b.id));
+            newBadges.forEach(b =>
+              toast.success(`${b.icon} Badge unlocked: ${b.name}`, { description: b.description, duration: 4000 })
+            );
+          }
+        } catch {}
+      })();
     }
   };
 
