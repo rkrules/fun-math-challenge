@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { loadSessions, SessionRecord } from '@/utils/progressStore';
 import { getOperationName, Operation } from '@/utils/mathUtils';
+import BadgesGrid from './BadgesGrid';
+import { computeStats } from '@/utils/badges';
 
 interface Props {
   onBack: () => void;
@@ -59,6 +61,9 @@ const ProgressDashboard = ({ onBack }: Props) => {
             <Stat label="Accuracy" value={`${lifetimeAccuracy}%`} />
             <Stat label="Best streak" value={bestStreak} />
           </div>
+
+          <BadgesGrid stats={computeStats(rows)} />
+
 
           <div className="space-y-2">
             <h3 className="text-sm uppercase tracking-wider text-muted-foreground">By operation</h3>
